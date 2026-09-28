@@ -10,6 +10,7 @@ import { CoreScene } from '../scenes/Core/CoreScene';
 import { RoadIntelligenceScene } from '../scenes/RoadIntelligence/RoadIntelligenceScene';
 import { FusionScene } from '../scenes/Fusion/FusionScene';
 import { CoNavScene } from '../scenes/CoNav/CoNavScene';
+import { FireDrillScene } from '../scenes/FireDrill/FireDrillScene';
 
 export const SceneCanvas: React.FC = () => {
   const {
@@ -49,6 +50,11 @@ export const SceneCanvas: React.FC = () => {
   if (currentChapter === '06') {
     return <CoNavScene />;
   }
+
+  if (currentChapter === '07') {
+    return <FireDrillScene />;
+  }
+
 
   const activeChap = getChapterById(currentChapter);
 

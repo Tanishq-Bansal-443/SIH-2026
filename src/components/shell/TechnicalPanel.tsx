@@ -77,8 +77,14 @@ export const TechnicalPanel: React.FC = () => {
       {/* System Evidence Stream Inspectors */}
       <Panel title="EVIDENCE STREAM INSPECTION" subtitle="ACTIVE REASONING INPUTS">
         <div className="space-y-2 pt-1">
-          {CONCEPTUAL_EVIDENCE_NODES.slice(0, 5).map((node) => {
+          {(currentChapter === '07'
+            ? CONCEPTUAL_EVIDENCE_NODES.filter((n) =>
+                ['node-firedrill', 'node-imu', 'node-road', 'node-memory', 'node-topology'].includes(n.id)
+              )
+            : CONCEPTUAL_EVIDENCE_NODES.slice(0, 5)
+          ).map((node) => {
             const isSelected = activeEvidence === node.type;
+
             return (
               <div
                 key={node.id}

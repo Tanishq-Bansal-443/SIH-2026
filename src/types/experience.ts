@@ -68,3 +68,19 @@ export interface EvidenceSourceNode {
   status: 'active' | 'degraded' | 'rejected' | 'standby';
   description: string;
 }
+
+export type FireDrillStage = 'IDLE' | 'ARMED' | 'RUNNING' | 'EVALUATING' | 'COMPLETE' | 'REVIEW';
+
+export type DiagnosticSubsystemState = 'STABLE' | 'SUPPORTING' | 'MATCHED' | 'CONSISTENT' | 'DEGRADED' | 'REVIEW' | 'INSUFFICIENT';
+
+export interface FireDrillDiagnostic {
+  id: string;
+  subsystem: string;
+  category: 'MOTION ESTIMATION' | 'ROAD EVIDENCE' | 'ROAD MEMORY' | 'TOPOLOGY' | 'PEER EVIDENCE' | 'GNSS DEPENDENCY';
+  state: DiagnosticSubsystemState;
+  role: string;
+  observation: string;
+  implication: string;
+  isWeakness?: boolean;
+}
+
