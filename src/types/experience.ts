@@ -84,3 +84,26 @@ export interface FireDrillDiagnostic {
   isWeakness?: boolean;
 }
 
+export type SystemLoopStageId = 'SENSE' | 'LEARN' | 'REMEMBER' | 'CROSS-CHECK' | 'NAVIGATE' | 'REHEARSE' | 'LEARN AGAIN';
+
+export interface SystemArchitectureNode {
+  id: SystemLoopStageId;
+  label: string;
+  stageNumber: string;
+  inputs: string[];
+  outputs: string[];
+  subsystems: string[];
+  role: string;
+  description: string;
+  connectedNodes: SystemLoopStageId[];
+}
+
+export interface ComponentTraceDefinition {
+  id: string;
+  name: string;
+  component: string;
+  description: string;
+  pathStages: SystemLoopStageId[];
+}
+
+
