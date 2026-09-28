@@ -6,6 +6,7 @@ import { ActionButton } from '../primitives/ActionButton';
 import { Navigation, Radio, ShieldAlert } from 'lucide-react';
 import { MissionScene } from '../scenes/Mission/MissionScene';
 import { FailureScene } from '../scenes/Failure/FailureScene';
+import { CoreScene } from '../scenes/Core/CoreScene';
 
 export const SceneCanvas: React.FC = () => {
   const {
@@ -28,6 +29,10 @@ export const SceneCanvas: React.FC = () => {
 
   if (currentChapter === '02') {
     return <FailureScene />;
+  }
+
+  if (currentChapter === '03') {
+    return <CoreScene />;
   }
 
   const activeChap = getChapterById(currentChapter);

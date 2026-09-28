@@ -30,8 +30,8 @@ export const CHAPTERS: ChapterDefinition[] = [
     title: 'TrueNorth Core Reasoning Architecture',
     shortDescription: 'The 6-stage adaptive cycle: SENSE → LEARN → REMEMBER → CROSS-CHECK → NAVIGATE → REHEARSE → LEARN AGAIN.',
     primaryQuestion: 'How does TrueNorth reason differently?',
-    dominantIdea: 'TrueNorth operates as a continuous evidence loop rather than a single black-box ML model.',
-    technicalTakeaway: 'TrueNorth builds navigation confidence by continuously cross-checking multiple evidence streams.',
+    dominantIdea: 'Navigation becomes an evidence loop.',
+    technicalTakeaway: 'TrueNorth is not one model. It is an evidence loop.',
     sceneType: 'core'
   },
   {
