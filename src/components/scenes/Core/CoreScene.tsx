@@ -19,44 +19,44 @@ const STAGE_ORDER: LoopStageId[] = [
 const STAGE_DESCRIPTIONS: Record<LoopStageId, { title: string; subtitle: string; body: string; evidenceType: EvidenceType }> = {
   SENSE: {
     title: 'STAGE 01 — SENSE (RAW HETEROGENEOUS SIGNALS)',
-    subtitle: 'ACCELEROMETER • GYROSCOPE • MAGNETOMETER • SOFT-GNSS',
-    body: 'TrueNorth begins by capturing raw multi-modal smartphone and vehicle sensor data streams without assuming any single source is absolute ground truth.',
+    subtitle: 'ACCELEROMETER • GYROSCOPE • MAGNETOMETER • GNSS • OPTIONAL IMU',
+    body: 'TrueNorth begins with heterogeneous sensor evidence. Raw multi-modal sensor streams are ingested continuously without assuming any single source is an absolute ground truth authority.',
     evidenceType: 'imu',
   },
   LEARN: {
     title: 'STAGE 02 — LEARN (LEARNED MOTION ESTIMATES)',
-    subtitle: 'AI SPEED • MOTION STATE • VEHICLE RESPONSE • ROAD SIGNATURES',
-    body: 'Neural network and heuristic estimators extract learned forward-velocity, motion state, and physical road impulse signatures directly from IMU waveforms.',
+    subtitle: 'AI SPEED ESTIMATOR • MOTION CLASSIFICATION • VEHICLE DNA • ROAD SIGNATURES',
+    body: 'AI neural estimators have specific estimation jobs: forward speed estimation from vibration, motion state classification, vehicle suspension response learning, and road impulse recognition.',
     evidenceType: 'speed',
   },
   REMEMBER: {
     title: 'STAGE 03 — REMEMBER (CONTEXTUAL MEMORY)',
     subtitle: 'ROAD DNA • ROADMEMORY • VEHICLE DNA • PAST FIRE DRILL HISTORY',
-    body: 'High-confidence RoadSense observations and vehicle response characteristics are stored in compact spatial memory to act as landmarks when re-encountered.',
+    body: 'TrueNorth does not treat observations as disposable. Repeated road signatures and vehicle characteristics are stored in compact spatial memory to act as landmarks when re-encountered.',
     evidenceType: 'memory',
   },
   CROSS_CHECK: {
     title: 'STAGE 04 — CROSS-CHECK (MULTI-EVIDENCE VERIFICATION)',
     subtitle: 'SOFT-GNSS • AI SPEED • ROADSENSE • TOPOLOCK • CoNAV WITNESSES',
-    body: 'Evidence from satellite signals, learned velocity, road memory, map topology, and peer vehicles is cross-verified for spatial and kinematic consistency.',
+    body: 'Evidence from GNSS quality, AI speed, road memory, map topology, kinematic constraints, and peer vehicles is cross-checked for spatial and physical consistency before influencing state fusion.',
     evidenceType: 'topology',
   },
   NAVIGATE: {
     title: 'STAGE 05 — NAVIGATE (CONTINUOUS STATE FUSION)',
     subtitle: 'POSITION • VELOCITY • ORIENTATION • BIAS • QUALITATIVE CONFIDENCE',
-    body: 'Adaptive fusion updates position, heading, velocity, and sensor biases continuously, maintaining dead-reckoning accuracy even through GNSS blackout.',
+    body: 'Adaptive fusion updates continuous navigation state (position, velocity, orientation, and sensor biases), preserving dead-reckoning continuity even through total GNSS outages.',
     evidenceType: 'gnss',
   },
   REHEARSE: {
     title: 'STAGE 06 — REHEARSE (FIRE DRILL SHADOW ENGINE)',
-    subtitle: 'SHADOW NAVIGATION • BLACKOUT EVALUATION • WEAKNESS DIAGNOSIS',
-    body: 'FireDrill shadow navigation simulates GNSS outages in parallel to evaluate blackout readiness without affecting live positioning.',
+    subtitle: 'SHADOW NAVIGATION • BLACKOUT REHEARSAL • WEAKNESS DIAGNOSIS',
+    body: 'FireDrill shadow navigation simulates GNSS blackouts in parallel to evaluate system readiness, heading stability, and drift tendencies without altering live navigation.',
     evidenceType: 'firedrill',
   },
   LEARN_AGAIN: {
     title: 'STAGE 07 — LEARN AGAIN (ADAPTIVE FEEDBACK LOOP)',
-    subtitle: 'UPDATE MEMORY • ADAPT TRUST WEIGHTS • RE-INITIALIZE SENSING',
-    body: 'Observed blackout behavior and re-observed landmarks update memory and sensor trust expectations, closing the adaptive reasoning loop back to SENSE.',
+    subtitle: 'UPDATE MEMORY • UPDATE CONFIDENCE • ADAPT FUTURE TRUST • SENSE',
+    body: 'Rehearsal outcomes and landmark re-observations update memory, expectations, and future trust weights—closing the adaptive reasoning loop back to SENSE.',
     evidenceType: 'road',
   },
 };
@@ -150,3 +150,4 @@ export const CoreScene: React.FC = () => {
     </main>
   );
 };
+
