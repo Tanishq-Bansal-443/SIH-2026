@@ -7,6 +7,7 @@ import { Navigation, Radio, ShieldAlert } from 'lucide-react';
 import { MissionScene } from '../scenes/Mission/MissionScene';
 import { FailureScene } from '../scenes/Failure/FailureScene';
 import { CoreScene } from '../scenes/Core/CoreScene';
+import { RoadIntelligenceScene } from '../scenes/RoadIntelligence/RoadIntelligenceScene';
 
 export const SceneCanvas: React.FC = () => {
   const {
@@ -33,6 +34,10 @@ export const SceneCanvas: React.FC = () => {
 
   if (currentChapter === '03') {
     return <CoreScene />;
+  }
+
+  if (currentChapter === '04') {
+    return <RoadIntelligenceScene />;
   }
 
   const activeChap = getChapterById(currentChapter);
