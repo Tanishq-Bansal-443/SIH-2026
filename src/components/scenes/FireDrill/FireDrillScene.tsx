@@ -1,11 +1,10 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useExperience } from '../../../state/ExperienceContext';
 import { getChapterById } from '../../../data/chapters';
-import type { FireDrillStage, FireDrillDiagnostic } from '../../../types/experience';
-import { FIREDRILL_DIAGNOSTICS, FIREDRILL_SUMMARY } from '../../../data/fireDrillFixtures';
+import type { FireDrillStage } from '../../../types/experience';
+import { FIREDRILL_SUMMARY } from '../../../data/fireDrillFixtures';
 import { FireDrillCanvas } from './FireDrillCanvas';
 import { FireDrillControls } from './FireDrillControls';
-import { ShieldAlert, CheckCircle2, X, Activity } from 'lucide-react';
 
 export const FireDrillScene: React.FC = () => {
   const {
@@ -14,12 +13,12 @@ export const FireDrillScene: React.FC = () => {
     setActiveEvidence,
     setGNSSState,
     nextChapter,
+    setActiveAction,
   } = useExperience();
 
   const [stage, setStage] = useState<FireDrillStage>('IDLE');
   const [progress, setProgress] = useState<number>(0);
   const [selectedDiagnosticId, setSelectedDiagnosticId] = useState<string | null>('diag-memory');
-  const [showDiagnosticModal, setShowDiagnosticModal] = useState<boolean>(false);
   const [isTracing, setIsTracing] = useState<boolean>(false);
   const [memoryUpdated, setMemoryUpdated] = useState<boolean>(false);
 
@@ -32,8 +31,10 @@ export const FireDrillScene: React.FC = () => {
     setInspectingNodeId('node-firedrill');
   }, [setActiveEvidence, setInspectingNodeId]);
 
-  const selectedDiag: FireDrillDiagnostic =
-    FIREDRILL_DIAGNOSTICS.find((d) => d.id === selectedDiagnosticId) || FIREDRILL_DIAGNOSTICS[2];
+  // Handler: Inspect Diagnostic
+  const handleInspectDiagnostic = () => {
+    setActiveAction('INSPECT_EVIDENCE');
+  };
 
   // Primary Action: START FIRE DRILL / REPLAY FIRE DRILL
   const handleStartFireDrill = useCallback(() => {
@@ -92,15 +93,11 @@ export const FireDrillScene: React.FC = () => {
     };
   }, []);
 
-  // Handler: Inspect Diagnostic
-  const handleInspectDiagnostic = () => {
-    setShowDiagnosticModal(true);
-  };
-
   // Handler: Trace Shadow Path
   const handleTraceShadowPath = () => {
     if (isTracing) return;
     setIsTracing(true);
+    setActiveAction('TRACE_CONSTRAINT');
 
     if (reducedMotion) {
       setIsTracing(false);
@@ -133,13 +130,8 @@ export const FireDrillScene: React.FC = () => {
     setStage('IDLE');
     setProgress(0);
     setGNSSState('healthy');
-    setShowDiagnosticModal(false);
     setMemoryUpdated(false);
-  };
-
-  // Handler: Update System Memory (LEARN AGAIN loop step)
-  const handleUpdateMemory = () => {
-    setMemoryUpdated(true);
+    setActiveAction(null);
   };
 
   return (
@@ -202,96 +194,6 @@ export const FireDrillScene: React.FC = () => {
         </div>
       </div>
 
-      {/* INSPECT DIAGNOSTIC MODAL / SLIDE-OVER DRAWER */}
-      {showDiagnosticModal && (
-        <div className="absolute top-24 right-6 z-30 max-w-sm w-full bg-[#151719] border border-[#71869A] p-4 rounded-sm shadow-2xl space-y-3 pointer-events-auto">
-          <div className="flex items-center justify-between border-b border-[#35383A] pb-2">
-            <div className="flex items-center gap-1.5 text-[#B89562]">
-              <ShieldAlert className="w-4 h-4" />
-              <span className="font-mono text-xs font-bold tracking-wider">
-                FIREDRILL SUBSYSTEM DIAGNOSTIC
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={() => setShowDiagnosticModal(false)}
-              className="text-[#747570] hover:text-[#E8E6E1]"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-
-          <div className="space-y-2 text-xs font-mono">
-            <div className="flex justify-between text-[#A7A6A1]">
-              <span>SUBSYSTEM:</span>
-              <span className="text-[#E8E6E1] font-bold">{selectedDiag.subsystem}</span>
-            </div>
-            <div className="flex justify-between text-[#A7A6A1]">
-              <span>CATEGORY:</span>
-              <span className="text-[#71869A]">{selectedDiag.category}</span>
-            </div>
-            <div className="flex justify-between text-[#A7A6A1]">
-              <span>STATE:</span>
-              <span
-                className={`font-bold ${
-                  selectedDiag.state === 'REVIEW'
-                    ? 'text-[#9B625E]'
-                    : selectedDiag.state === 'STABLE' || selectedDiag.state === 'CONSISTENT'
-                    ? 'text-[#78947F]'
-                    : 'text-[#B89562]'
-                }`}
-              >
-                {selectedDiag.state}
-              </span>
-            </div>
-            <div className="flex justify-between text-[#A7A6A1]">
-              <span>SYSTEM ROLE:</span>
-              <span className="text-[#E8E6E1]">{selectedDiag.role}</span>
-            </div>
-          </div>
-
-          <div className="space-y-1.5 p-2.5 bg-[#0B0D0F] border border-[#35383A] rounded-sm text-xs font-mono">
-            <div>
-              <span className="text-[#71869A] block text-[10px]">OBSERVED BEHAVIOUR:</span>
-              <p className="text-[#E8E6E1] leading-relaxed">{selectedDiag.observation}</p>
-            </div>
-            <div className="pt-1.5 border-t border-[#35383A]">
-              <span className="text-[#B89562] block text-[10px]">SYSTEM IMPLICATION:</span>
-              <p className="text-[#A7A6A1] leading-relaxed">{selectedDiag.implication}</p>
-            </div>
-          </div>
-
-          {/* Learn Again Action */}
-          <div className="pt-2 flex items-center justify-between border-t border-[#35383A]">
-            <span className="font-mono text-[10px] text-[#747570]">
-              FEEDBACK INTO MEMORY
-            </span>
-            <button
-              type="button"
-              onClick={handleUpdateMemory}
-              disabled={memoryUpdated}
-              className={`px-3 py-1.5 rounded-sm font-mono text-xs font-semibold tracking-wider transition-colors flex items-center gap-1.5 ${
-                memoryUpdated
-                  ? 'bg-[#78947F]/20 text-[#78947F] border border-[#78947F]'
-                  : 'bg-[#B89562] text-[#0B0D0F] hover:bg-[#8EA4B8]'
-              }`}
-            >
-              {memoryUpdated ? (
-                <>
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>MEMORY UPDATED</span>
-                </>
-              ) : (
-                <>
-                  <Activity className="w-3.5 h-3.5" />
-                  <span>UPDATE SYSTEM MEMORY</span>
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Cartographic SVG Visual Canvas */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-auto">
         <svg
@@ -306,7 +208,7 @@ export const FireDrillScene: React.FC = () => {
             selectedDiagnosticId={selectedDiagnosticId}
             onSelectDiagnostic={(id) => {
               setSelectedDiagnosticId(id);
-              setShowDiagnosticModal(true);
+              setActiveAction('INSPECT_EVIDENCE');
             }}
             reducedMotion={reducedMotion}
           />

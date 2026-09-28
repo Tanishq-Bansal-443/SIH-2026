@@ -5,7 +5,6 @@ import type { SystemLoopStageId, SystemArchitectureNode } from '../../../types/e
 import { SYSTEM_NODES, COMPONENT_TRACES } from '../../../data/systemFixtures';
 import { SystemCanvas } from './SystemCanvas';
 import { SystemControls } from './SystemControls';
-import { Layers, X } from 'lucide-react';
 
 export const SystemScene: React.FC = () => {
   const {
@@ -13,13 +12,13 @@ export const SystemScene: React.FC = () => {
     setInspectingNodeId,
     setActiveEvidence,
     setGNSSState,
+    setActiveAction,
   } = useExperience();
 
   const [selectedNodeId, setSelectedNodeId] = useState<SystemLoopStageId>('CROSS-CHECK');
   const [activeTraceStepIndex, setActiveTraceStepIndex] = useState<number | null>(null);
   const [activeComponentTraceId, setActiveComponentTraceId] = useState<string | null>(null);
   const [isLoopRunning, setIsLoopRunning] = useState<boolean>(false);
-  const [showNodeDrawer, setShowNodeDrawer] = useState<boolean>(false);
 
   const loopTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const activeChap = getChapterById('08');
@@ -43,6 +42,7 @@ export const SystemScene: React.FC = () => {
     setActiveComponentTraceId(null);
     setIsLoopRunning(true);
     setActiveTraceStepIndex(0);
+    setActiveAction('TRACE_CONSTRAINT');
 
     if (reducedMotion) {
       // Static loop state for reduced motion
@@ -65,7 +65,7 @@ export const SystemScene: React.FC = () => {
         setSelectedNodeId(SYSTEM_NODES[currentStep].id);
       }
     }, 1100);
-  }, [reducedMotion]);
+  }, [reducedMotion, setActiveAction]);
 
   // Clean up timer on unmount
   useEffect(() => {
@@ -80,6 +80,7 @@ export const SystemScene: React.FC = () => {
   const handleTraceComponent = () => {
     if (isLoopRunning) return;
     setActiveTraceStepIndex(null);
+    setActiveAction('TRACE_CONSTRAINT');
 
     const traceIds = COMPONENT_TRACES.map((t) => t.id);
     const currentIndex = activeComponentTraceId ? traceIds.indexOf(activeComponentTraceId) : -1;
@@ -97,7 +98,7 @@ export const SystemScene: React.FC = () => {
 
   // Action: INSPECT NODE
   const handleInspectNode = () => {
-    setShowNodeDrawer(true);
+    setActiveAction('INSPECT_EVIDENCE');
   };
 
   // Action: REPLAY LOOP
@@ -151,61 +152,6 @@ export const SystemScene: React.FC = () => {
         </div>
       </div>
 
-      {/* NODE INSPECTION DRAWER / SLIDE-OVER MODAL */}
-      {showNodeDrawer && (
-        <div className="absolute top-24 right-6 z-30 max-w-sm w-full bg-[#151719] border border-[#71869A] p-4 rounded-sm shadow-2xl space-y-3 pointer-events-auto">
-          <div className="flex items-center justify-between border-b border-[#35383A] pb-2">
-            <div className="flex items-center gap-1.5 text-[#B89562]">
-              <Layers className="w-4 h-4" />
-              <span className="font-mono text-xs font-bold tracking-wider">
-                STAGE {selectedNode.stageNumber}: {selectedNode.label}
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={() => setShowNodeDrawer(false)}
-              className="text-[#747570] hover:text-[#E8E6E1]"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-
-          <div className="space-y-2 text-xs font-mono">
-            <div>
-              <span className="text-[#71869A] block text-[10px]">STAGE DESCRIPTION:</span>
-              <p className="text-[#E8E6E1] leading-relaxed font-sans text-xs">
-                {selectedNode.description}
-              </p>
-            </div>
-
-            <div className="pt-2 border-t border-[#35383A]">
-              <span className="text-[#71869A] block text-[10px] mb-1">INPUT STREAMS:</span>
-              <ul className="list-disc list-inside text-[#A7A6A1] space-y-0.5">
-                {selectedNode.inputs.map((inp, idx) => (
-                  <li key={idx}>{inp}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="pt-2 border-t border-[#35383A]">
-              <span className="text-[#B89562] block text-[10px] mb-1">OUTPUT PRODUCTIONS:</span>
-              <ul className="list-disc list-inside text-[#E8E6E1] space-y-0.5">
-                {selectedNode.outputs.map((out, idx) => (
-                  <li key={idx}>{out}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="pt-2 border-t border-[#35383A] flex justify-between text-[10px]">
-              <span className="text-[#747570]">CONNECTED TO:</span>
-              <span className="text-[#78947F] font-bold">
-                {selectedNode.connectedNodes.join(' → ')}
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Cartographic SVG Visual Canvas */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-auto">
         <svg
@@ -218,7 +164,7 @@ export const SystemScene: React.FC = () => {
             selectedNodeId={selectedNodeId}
             onSelectNode={(id) => {
               setSelectedNodeId(id);
-              setShowNodeDrawer(true);
+              setActiveAction('INSPECT_EVIDENCE');
             }}
             activeTraceStepIndex={activeTraceStepIndex}
             activeComponentTraceId={activeComponentTraceId}

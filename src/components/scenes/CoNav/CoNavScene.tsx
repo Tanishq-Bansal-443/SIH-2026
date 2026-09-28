@@ -4,7 +4,7 @@ import { CoNavCanvas, CONAV_PEERS } from './CoNavCanvas';
 import type { CoNavPeerDetail } from './CoNavCanvas';
 import { CoNavControls } from './CoNavControls';
 import { getChapterById } from '../../../data/chapters';
-import { ShieldAlert, FileText, X } from 'lucide-react';
+import { ShieldAlert } from 'lucide-react';
 
 export const CoNavScene: React.FC = () => {
   const {
@@ -13,11 +13,11 @@ export const CoNavScene: React.FC = () => {
     reducedMotion,
     setInspectingNodeId,
     setActiveEvidence,
+    setActiveAction,
   } = useExperience();
 
   const [activeValidationStep, setActiveValidationStep] = useState<number | null>(null);
   const [isTracingConsistency, setIsTracingConsistency] = useState<boolean>(false);
-  const [showEvidencePacketModal, setShowEvidencePacketModal] = useState<boolean>(false);
 
   const activeChap = getChapterById('06');
 
@@ -37,8 +37,9 @@ export const CoNavScene: React.FC = () => {
       setSelectedPeerId(peerId);
       setActiveValidationStep(null);
       setIsTracingConsistency(false);
+      setActiveAction('EXAMINE_PEER');
     },
-    [setSelectedPeerId]
+    [setSelectedPeerId, setActiveAction]
   );
 
   // EXAMINE PEER button click cycler
@@ -51,7 +52,7 @@ export const CoNavScene: React.FC = () => {
 
   // INSPECT EVIDENCE button click
   const handleInspectEvidence = () => {
-    setShowEvidencePacketModal((prev) => !prev);
+    setActiveAction('INSPECT_EVIDENCE');
   };
 
   // TRACE CONSISTENCY sequence step animator
@@ -59,6 +60,7 @@ export const CoNavScene: React.FC = () => {
     if (isTracingConsistency) return;
     setIsTracingConsistency(true);
     setActiveValidationStep(0);
+    setActiveAction('TRACE_CONSTRAINT');
 
     const stepInterval = setInterval(() => {
       setActiveValidationStep((prevStep) => {
@@ -143,56 +145,6 @@ export const CoNavScene: React.FC = () => {
         </div>
       </div>
 
-      {/* Peer V2X Witness Packet Modal / Subpanel */}
-      {showEvidencePacketModal && (
-        <div className="absolute top-24 right-6 z-30 max-w-sm w-full bg-[#151719] border border-[#71869A] p-4 rounded-sm shadow-xl space-y-3 pointer-events-auto">
-          <div className="flex items-center justify-between border-b border-[#35383A] pb-2">
-            <div className="flex items-center gap-1.5 text-[#B89562]">
-              <FileText className="w-4 h-4" />
-              <span className="font-mono text-xs font-bold tracking-wider">
-                V2X PEER EVIDENCE PACKET
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={() => setShowEvidencePacketModal(false)}
-              className="text-[#747570] hover:text-[#E8E6E1]"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-
-          <div className="space-y-2 text-xs font-mono">
-            <div className="flex justify-between text-[#A7A6A1]">
-              <span>SENDER CALLSIGN:</span>
-              <span className="text-[#E8E6E1]">{selectedPeer.callsign}</span>
-            </div>
-            <div className="flex justify-between text-[#A7A6A1]">
-              <span>ESTIMATED STATE:</span>
-              <span className="text-[#78947F]">POS / VEL / HEADING</span>
-            </div>
-            <div className="flex justify-between text-[#A7A6A1]">
-              <span>UNCERTAINTY BOUND:</span>
-              <span className="text-[#B89562]">{selectedPeer.uncertaintyQualitative}</span>
-            </div>
-            <div className="flex justify-between text-[#A7A6A1]">
-              <span>TIMESTAMP FRESHNESS:</span>
-              <span className="text-[#E8E6E1]">
-                {selectedPeer.validationChecks.temporal.freshnessMs}ms ago
-              </span>
-            </div>
-            <div className="flex justify-between text-[#A7A6A1]">
-              <span>SENSOR CONFIDENCE:</span>
-              <span className="text-[#71869A]">QUALITATIVE COVARIANCE</span>
-            </div>
-          </div>
-
-          <div className="p-2 bg-[#0B0D0F] border border-[#35383A] rounded-sm text-[10px] font-mono text-[#747570] leading-relaxed">
-            CoNav treats peer packets as uncertain evidence inputs. Peer states are never blindly accepted or averaged; they undergo 4-check topology and kinematic validation.
-          </div>
-        </div>
-      )}
-
       {/* Chapter 06 Visual Cartographic SVG Canvas */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-auto">
         <svg
@@ -205,7 +157,7 @@ export const CoNavScene: React.FC = () => {
             selectedPeerId={currentPeerId}
             onSelectPeer={handleSelectPeer}
             activeValidationStep={activeValidationStep}
-            showEvidencePacketModal={showEvidencePacketModal}
+            showEvidencePacketModal={false}
             reducedMotion={reducedMotion}
           />
 
@@ -223,7 +175,7 @@ export const CoNavScene: React.FC = () => {
         onTraceConsistency={handleTraceConsistency}
         selectedPeerCallsign={selectedPeer.callsign}
         isTracingConsistency={isTracingConsistency}
-        showEvidencePacketModal={showEvidencePacketModal}
+        showEvidencePacketModal={false}
       />
     </main>
   );

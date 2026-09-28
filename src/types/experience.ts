@@ -27,6 +27,8 @@ export interface ChapterDefinition {
   sceneType: 'mission' | 'failure' | 'core' | 'road' | 'fusion' | 'conav' | 'firedrill' | 'system';
 }
 
+export type ActionType = 'INSPECT_EVIDENCE' | 'TRACE_CONSTRAINT' | 'VIEW_MEMORY' | 'EXAMINE_PEER' | null;
+
 export interface ExperienceState {
   currentChapter: ChapterId;
   gnssState: GNSSQualityState;
@@ -36,6 +38,7 @@ export interface ExperienceState {
   firedrillActive: boolean;
   reducedMotion: boolean;
   inspectingNodeId: string | null;
+  activeAction: ActionType;
 }
 
 /* Domain Fixture Types for Visual Instrumentation */

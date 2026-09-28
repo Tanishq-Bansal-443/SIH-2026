@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type { ReactNode } from 'react';
-import type { ChapterId, EvidenceType, ExperienceState, GNSSQualityState } from '../types/experience';
+import type { ActionType, ChapterId, EvidenceType, ExperienceState, GNSSQualityState } from '../types/experience';
 import { CHAPTERS } from '../data/chapters';
 
 interface ExperienceContextType extends ExperienceState {
@@ -14,6 +14,7 @@ interface ExperienceContextType extends ExperienceState {
   toggleFireDrill: () => void;
   setReducedMotion: (enabled: boolean) => void;
   setInspectingNodeId: (id: string | null) => void;
+  setActiveAction: (action: ActionType) => void;
 }
 
 const ExperienceContext = createContext<ExperienceContextType | undefined>(undefined);
@@ -44,6 +45,7 @@ export const ExperienceProvider: React.FC<{ children: ReactNode }> = ({ children
   const [selectedPeerId, setSelectedPeerId] = useState<string | null>(null);
   const [firedrillActive, setFiredrillActive] = useState<boolean>(false);
   const [inspectingNodeId, setInspectingNodeId] = useState<string | null>(null);
+  const [activeAction, setActiveAction] = useState<ActionType>(null);
 
   // System reduced-motion preference detection
   const [reducedMotion, setReducedMotion] = useState<boolean>(() => {
@@ -59,6 +61,7 @@ export const ExperienceProvider: React.FC<{ children: ReactNode }> = ({ children
     setSelectedRoadEventId(null);
     setSelectedPeerId(null);
     setInspectingNodeId(null);
+    setActiveAction(null);
   }, []);
 
   const nextChapter = useCallback(() => {
@@ -109,6 +112,7 @@ export const ExperienceProvider: React.FC<{ children: ReactNode }> = ({ children
         setSelectedPeerId(null);
         setInspectingNodeId(null);
         setActiveEvidence(null);
+        setActiveAction(null);
       }
     };
 
@@ -127,6 +131,7 @@ export const ExperienceProvider: React.FC<{ children: ReactNode }> = ({ children
         firedrillActive,
         reducedMotion,
         inspectingNodeId,
+        activeAction,
         setChapter,
         nextChapter,
         prevChapter,
@@ -137,6 +142,7 @@ export const ExperienceProvider: React.FC<{ children: ReactNode }> = ({ children
         toggleFireDrill,
         setReducedMotion,
         setInspectingNodeId,
+        setActiveAction,
       }}
     >
       {children}
