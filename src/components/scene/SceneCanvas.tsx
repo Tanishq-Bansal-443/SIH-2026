@@ -5,6 +5,7 @@ import { CONCEPTUAL_ROAD_EVENTS, CONCEPTUAL_PEERS } from '../../data/conceptualF
 import { ActionButton } from '../primitives/ActionButton';
 import { Navigation, Radio, ShieldAlert } from 'lucide-react';
 import { MissionScene } from '../scenes/Mission/MissionScene';
+import { FailureScene } from '../scenes/Failure/FailureScene';
 
 export const SceneCanvas: React.FC = () => {
   const {
@@ -20,9 +21,13 @@ export const SceneCanvas: React.FC = () => {
     reducedMotion,
   } = useExperience();
 
-  // If active chapter is Chapter 01 Mission, render dedicated MissionScene component
+  // Route active scene based on currentChapter
   if (currentChapter === '01') {
     return <MissionScene />;
+  }
+
+  if (currentChapter === '02') {
+    return <FailureScene />;
   }
 
   const activeChap = getChapterById(currentChapter);

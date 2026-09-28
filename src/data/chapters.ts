@@ -19,8 +19,8 @@ export const CHAPTERS: ChapterDefinition[] = [
     title: 'Failure Modes: Satellite Outage & Inertial Drift',
     shortDescription: 'Examine how conventional inertial dead reckoning rapidly accumulates unbounded position uncertainty.',
     primaryQuestion: 'What happens when GNSS becomes unreliable?',
-    dominantIdea: 'Unassisted double integration of IMU sensor noise produces rapid exponential drift.',
-    technicalTakeaway: 'The navigation challenge is knowing how much to trust each sensor at every instant.',
+    dominantIdea: 'Unassisted inertial dead reckoning accumulates uncertainty.',
+    technicalTakeaway: 'Continuity is not the same as certainty.',
     sceneType: 'failure'
   },
   {
