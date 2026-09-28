@@ -8,6 +8,8 @@ import { MissionScene } from '../scenes/Mission/MissionScene';
 import { FailureScene } from '../scenes/Failure/FailureScene';
 import { CoreScene } from '../scenes/Core/CoreScene';
 import { RoadIntelligenceScene } from '../scenes/RoadIntelligence/RoadIntelligenceScene';
+import { FusionScene } from '../scenes/Fusion/FusionScene';
+import { CoNavScene } from '../scenes/CoNav/CoNavScene';
 
 export const SceneCanvas: React.FC = () => {
   const {
@@ -38,6 +40,14 @@ export const SceneCanvas: React.FC = () => {
 
   if (currentChapter === '04') {
     return <RoadIntelligenceScene />;
+  }
+
+  if (currentChapter === '05') {
+    return <FusionScene />;
+  }
+
+  if (currentChapter === '06') {
+    return <CoNavScene />;
   }
 
   const activeChap = getChapterById(currentChapter);
