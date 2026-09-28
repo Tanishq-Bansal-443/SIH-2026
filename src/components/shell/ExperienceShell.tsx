@@ -33,23 +33,23 @@ export const ExperienceShell: React.FC = () => {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col bg-[#0B0D0F] text-[#E8E6E1] overflow-hidden">
-      {/* Top Header */}
+    <div className="w-screen h-screen flex flex-col bg-[#0B0D0F] text-[#E8E6E1] overflow-hidden select-none">
+      {/* Global Chapter Header */}
       <ChapterHeader />
 
-      {/* Main Workspace Layout */}
-      <div className="flex-1 flex overflow-hidden relative">
-        {/* Left Chapter Rail Navigator */}
+      {/* Main Workspace Layout (Desktop: Row / Mobile: Column) */}
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+        {/* Left Chapter Rail Navigator (Desktop) */}
         <ChapterNavigator />
 
-        {/* Central Scene Canvas Canvas Environment */}
+        {/* Central Cartographic Visual Scene Canvas */}
         <SceneCanvas />
 
         {/* Right Technical Explanation Panel */}
         <TechnicalPanel />
       </div>
 
-      {/* Inspection Drawer / Context Panel */}
+      {/* Inspection Context Drawer / Slide-Out Panel */}
       <ContextPanel
         isOpen={isDrawerOpen}
         onClose={handleCloseDrawer}

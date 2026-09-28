@@ -67,12 +67,12 @@ export const ChapterNavigator: React.FC = () => {
 
       {/* Sequential Nav Controls & Shortcut Hint */}
       <div className="p-3 border-t border-[#35383A] bg-[#0B0D0F]/40 space-y-2">
-        <div className="flex items-center justify-between gap-1">
+        <div className="flex items-center justify-between gap-1.5">
           <button
             type="button"
             onClick={prevChapter}
             disabled={currentIndex === 0}
-            className="flex-1 flex items-center justify-center gap-1 py-1.5 px-2 bg-[#151719] border border-[#35383A] rounded-sm text-xs font-mono text-[#A7A6A1] hover:text-[#E8E6E1] disabled:opacity-30 disabled:pointer-events-none"
+            className="flex-1 flex items-center justify-center gap-1 py-1.5 px-2 bg-[#151719] border border-[#35383A] rounded-sm text-xs font-mono text-[#A7A6A1] hover:text-[#E8E6E1] hover:border-[#71869A] disabled:opacity-30 disabled:pointer-events-none transition-colors"
             aria-label="Previous Chapter"
           >
             <ChevronUp className="w-3.5 h-3.5" />
@@ -82,7 +82,7 @@ export const ChapterNavigator: React.FC = () => {
             type="button"
             onClick={nextChapter}
             disabled={currentIndex === CHAPTERS.length - 1}
-            className="flex-1 flex items-center justify-center gap-1 py-1.5 px-2 bg-[#151719] border border-[#35383A] rounded-sm text-xs font-mono text-[#A7A6A1] hover:text-[#E8E6E1] disabled:opacity-30 disabled:pointer-events-none"
+            className="flex-1 flex items-center justify-center gap-1 py-1.5 px-2 bg-[#151719] border border-[#35383A] rounded-sm text-xs font-mono text-[#A7A6A1] hover:text-[#E8E6E1] hover:border-[#71869A] disabled:opacity-30 disabled:pointer-events-none transition-colors"
             aria-label="Next Chapter"
           >
             <span>NEXT</span>

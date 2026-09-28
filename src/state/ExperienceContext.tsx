@@ -18,6 +18,24 @@ interface ExperienceContextType extends ExperienceState {
 
 const ExperienceContext = createContext<ExperienceContextType | undefined>(undefined);
 
+const getDefaultGNSSState = (chapterId: ChapterId): GNSSQualityState => {
+  switch (chapterId) {
+    case '01':
+      return 'healthy';
+    case '02':
+      return 'degrading';
+    case '03':
+      return 'unreliable';
+    case '04':
+    case '05':
+    case '06':
+    case '07':
+    case '08':
+    default:
+      return 'unavailable';
+  }
+};
+
 export const ExperienceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currentChapter, setCurrentChapter] = useState<ChapterId>('01');
   const [gnssState, setGNSSState] = useState<GNSSQualityState>('healthy');
@@ -35,32 +53,9 @@ export const ExperienceProvider: React.FC<{ children: ReactNode }> = ({ children
     return false;
   });
 
-  // Automatically update GNSS state based on chapter context default
-  useEffect(() => {
-    switch (currentChapter) {
-      case '01':
-        setGNSSState('healthy');
-        break;
-      case '02':
-        setGNSSState('degrading');
-        break;
-      case '03':
-        setGNSSState('unreliable');
-        break;
-      case '04':
-      case '05':
-      case '06':
-      case '07':
-      case '08':
-        setGNSSState('unavailable');
-        break;
-      default:
-        setGNSSState('healthy');
-    }
-  }, [currentChapter]);
-
   const setChapter = useCallback((id: ChapterId) => {
     setCurrentChapter(id);
+    setGNSSState(getDefaultGNSSState(id));
     setSelectedRoadEventId(null);
     setSelectedPeerId(null);
     setInspectingNodeId(null);
@@ -93,10 +88,10 @@ export const ExperienceProvider: React.FC<{ children: ReactNode }> = ({ children
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
-  // Keyboard navigation shortcuts: 1-8 keys to jump chapter, ArrowUp/ArrowDown for prev/next
+  // Keyboard navigation shortcuts: 1-8 keys to jump chapter, Arrow keys, Esc to clear
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't trigger if user is typing in an input
+      // Don't trigger if user is typing in an input element
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) {
         return;
       }

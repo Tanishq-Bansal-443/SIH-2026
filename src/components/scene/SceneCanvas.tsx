@@ -4,6 +4,7 @@ import { getChapterById } from '../../data/chapters';
 import { CONCEPTUAL_ROAD_EVENTS, CONCEPTUAL_PEERS } from '../../data/conceptualFixtures';
 import { ActionButton } from '../primitives/ActionButton';
 import { Navigation, Radio, ShieldAlert } from 'lucide-react';
+import { MissionScene } from '../scenes/Mission/MissionScene';
 
 export const SceneCanvas: React.FC = () => {
   const {
@@ -19,42 +20,47 @@ export const SceneCanvas: React.FC = () => {
     reducedMotion,
   } = useExperience();
 
+  // If active chapter is Chapter 01 Mission, render dedicated MissionScene component
+  if (currentChapter === '01') {
+    return <MissionScene />;
+  }
+
   const activeChap = getChapterById(currentChapter);
 
   return (
     <main
       aria-label="TrueNorth Cartographic Visual World"
-      className="relative flex-1 bg-[#0B0D0F] overflow-hidden flex flex-col justify-between p-6 select-none"
+      className="relative flex-1 bg-[#0B0D0F] overflow-hidden flex flex-col justify-between p-4 sm:p-6 select-none"
     >
-      {/* Background Cartographic Grid Pattern */}
+      {/* LAYER 1: BACKGROUND — Engineering Grid Matrix Pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(#35383A_1px,transparent_1px)] [background-size:24px_24px] opacity-25 pointer-events-none" />
 
-      {/* Chapter Narrative Overlay (Top-Left Canvas Layer) */}
-      <div className="relative z-10 max-w-xl space-y-2 pointer-events-none">
+      {/* LAYER 7: NARRATIVE OVERLAY — Chapter Title & Context */}
+      <div className="relative z-10 max-w-xl space-y-1 sm:space-y-2 pointer-events-none">
         <div className="flex items-center gap-2">
           <span className="tn-tag tn-tag-brass">{activeChap.number}</span>
           <span className="font-mono text-xs text-[#71869A] tracking-wider uppercase">
             {activeChap.label} SCENE CANVAS
           </span>
         </div>
-        <h2 className="font-sans font-bold text-2xl text-[#E8E6E1] tracking-tight">
+        <h2 className="font-sans font-bold text-xl sm:text-2xl text-[#E8E6E1] tracking-tight">
           {activeChap.title}
         </h2>
-        <p className="font-sans text-xs text-[#A7A6A1] leading-relaxed">
+        <p className="font-sans text-xs text-[#A7A6A1] leading-relaxed line-clamp-2 sm:line-clamp-3">
           {activeChap.shortDescription}
         </p>
       </div>
 
-      {/* Central Interactive Cartographic Scene (SVG Canvas Engine) */}
+      {/* CENTRAL CARTOGRAPHIC ENGINE (Layers 2-6 Composition) */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-auto">
         <svg
-          className="w-full h-full max-w-5xl max-h-[700px] p-8"
+          className="w-full h-full max-w-5xl max-h-[700px] p-4 sm:p-8"
           viewBox="0 0 1000 600"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>
-            {/* SoftGNSS Uncertainty Gradient */}
+            {/* SoftGNSS Uncertainty Radial Gradient */}
             <radialGradient id="gnssUncertainty" cx="50%" cy="50%" r="50%">
               <stop
                 offset="0%"
@@ -71,8 +77,7 @@ export const SceneCanvas: React.FC = () => {
             </radialGradient>
           </defs>
 
-          {/* LAYER 1: BACKGROUND — Subdued Cartographic Road Network */}
-          {/* Main Primary Highway Segment */}
+          {/* LAYER 2: MAP / ROAD TOPOLOGY GEOMETRY */}
           <path
             d="M 100 450 C 250 450, 300 200, 500 200 C 700 200, 750 350, 900 350"
             stroke="#35383A"
@@ -93,7 +98,6 @@ export const SceneCanvas: React.FC = () => {
             strokeOpacity="0.4"
           />
 
-          {/* Intersecting TopoLock Road Geometry */}
           <path
             d="M 500 50 L 500 550"
             stroke="#35383A"
@@ -101,9 +105,9 @@ export const SceneCanvas: React.FC = () => {
             strokeDasharray="4 4"
             strokeOpacity="0.5"
           />
+          <circle cx="500" cy="200" r="16" stroke="#35383A" strokeWidth="1" fill="none" />
 
-          {/* LAYER 2: SYSTEM — Navigation Path & Vehicle Positioning */}
-          {/* Active Navigation Trajectory */}
+          {/* LAYER 3: ROUTE — Active Navigation Trajectory */}
           <path
             d="M 100 450 C 250 450, 300 200, 480 200"
             stroke="#B89562"
@@ -111,7 +115,7 @@ export const SceneCanvas: React.FC = () => {
             strokeLinecap="round"
           />
 
-          {/* FireDrill Shadow Navigation Path (When Active) */}
+          {/* FireDrill Shadow Navigation Trajectory Overlay */}
           {firedrillActive && (
             <g>
               <path
@@ -120,19 +124,19 @@ export const SceneCanvas: React.FC = () => {
                 strokeWidth="2"
                 strokeDasharray="6 4"
               />
-              <text x="320" y="240" fill="#9B625E" fontSize="10" fontFamily="JetBrains Mono">
+              <text x="320" y="243" fill="#9B625E" fontSize="10" fontFamily="JetBrains Mono">
                 FIRE DRILL SHADOW PATH (GNSS DEPRIVED)
               </text>
             </g>
           )}
 
-          {/* GNSS Soft Uncertainty Region Around Vehicle */}
+          {/* LAYER 4: SYSTEM STATE — Vehicle Position & Uncertainty Region */}
           <circle
             cx="480"
             cy="200"
             r={
               gnssState === 'healthy'
-                ? '30'
+                ? '32'
                 : gnssState === 'degrading'
                 ? '65'
                 : gnssState === 'unreliable'
@@ -152,13 +156,13 @@ export const SceneCanvas: React.FC = () => {
             className={reducedMotion ? '' : 'animate-pulse'}
           />
 
-          {/* Vehicle Marker */}
+          {/* Vehicle Marker Instrument Node */}
           <g transform="translate(480, 200)">
             <circle r="12" fill="#151719" stroke="#B89562" strokeWidth="2" />
             <polygon points="0,-7 5,5 -5,5" fill="#B89562" />
           </g>
 
-          {/* LAYER 3: EVIDENCE — RoadSense Events & Memory Landmarks */}
+          {/* LAYER 5: EVIDENCE — RoadSense Events & Memory Markers */}
           {CONCEPTUAL_ROAD_EVENTS.map((event, idx) => {
             const posX = 200 + idx * 180;
             const posY = idx % 2 === 0 ? 350 : 220;
@@ -198,7 +202,7 @@ export const SceneCanvas: React.FC = () => {
             );
           })}
 
-          {/* LAYER 4: CoNAV PEER VEHICLES (Chapter 06 / Fusion context) */}
+          {/* CoNav Peer Vehicle Witness Nodes & Vector Links */}
           {CONCEPTUAL_PEERS.map((peer, idx) => {
             const peerX = 650 + idx * 70;
             const peerY = 220 + idx * 60;
@@ -211,7 +215,7 @@ export const SceneCanvas: React.FC = () => {
                 onClick={() => setSelectedPeerId(isSelected ? null : peer.id)}
                 className="cursor-pointer"
               >
-                {/* Peer Constraint Line to Vehicle */}
+                {/* LAYER 6: INTERACTION — Peer Constraint Vector Line */}
                 <line
                   x1="480"
                   y1="200"
@@ -243,15 +247,15 @@ export const SceneCanvas: React.FC = () => {
             );
           })}
 
-          {/* LAYER 5: NARRATIVE & CONCEPTUAL DISCLAIMER */}
+          {/* Watermark Requirement Safeguard */}
           <text x="20" y="580" fill="#747570" fontSize="10" fontFamily="JetBrains Mono">
             VISUALIZATION: CONCEPTUAL REASONING CANVAS (NON-TELEMETRY)
           </text>
         </svg>
       </div>
 
-      {/* Floating Canvas Controls (Bottom Canvas Overlay) */}
-      <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-[#35383A]/60 bg-[#0B0D0F]/80 backdrop-blur-sm p-3 rounded-sm">
+      {/* CONTEXTUAL ACTION BAR (Bottom Canvas Layer) */}
+      <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#35383A]/60 bg-[#0B0D0F]/85 backdrop-blur-sm p-3 rounded-sm">
         <div className="flex items-center gap-2">
           <ActionButton
             action="INSPECT SIGNAL"
