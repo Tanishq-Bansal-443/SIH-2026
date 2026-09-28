@@ -1,0 +1,215 @@
+@import './tokens.css';
+
+/* Global Base Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--tn-bg-base);
+  color: var(--tn-text-primary);
+  font-family: var(--tn-font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar for Technical Panels */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--tn-bg-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--tn-geo-major);
+  border-radius: var(--tn-radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--tn-steel-base);
+}
+
+/* Keyboard Focus Styling — Accessible restrained outline */
+*:focus-visible {
+  outline: 2px solid var(--tn-steel-highlight);
+  outline-offset: 2px;
+}
+
+/* Typography Utility Classes */
+.font-sans {
+  font-family: var(--tn-font-sans);
+}
+
+.font-mono {
+  font-family: var(--tn-font-mono);
+}
+
+/* Chapter & Technical Headers */
+.tn-chapter-num {
+  font-family: var(--tn-font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--tn-brass-base);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.tn-chapter-title {
+  font-family: var(--tn-font-sans);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--tn-text-primary);
+}
+
+.tn-section-title {
+  font-family: var(--tn-font-sans);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--tn-text-primary);
+}
+
+.tn-body-text {
+  font-family: var(--tn-font-sans);
+  font-size: 0.875rem;
+  color: var(--tn-text-secondary);
+  line-height: 1.6;
+}
+
+.tn-tech-label {
+  font-family: var(--tn-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tn-steel-base);
+}
+
+.tn-metadata-key {
+  font-family: var(--tn-font-mono);
+  font-size: 0.7rem;
+  color: var(--tn-text-muted);
+  text-transform: uppercase;
+}
+
+.tn-metadata-val {
+  font-family: var(--tn-font-mono);
+  font-size: 0.75rem;
+  color: var(--tn-text-primary);
+}
+
+/* Restrained Tag / Badge styles */
+.tn-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--tn-radius-sm);
+  font-family: var(--tn-font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1px solid var(--tn-geo-major);
+  background: var(--tn-bg-panel);
+}
+
+.tn-tag-validated {
+  border-color: rgba(120, 148, 127, 0.4);
+  color: var(--tn-state-validated);
+  background: rgba(120, 148, 127, 0.08);
+}
+
+.tn-tag-warning {
+  border-color: rgba(168, 138, 88, 0.4);
+  color: var(--tn-state-warning);
+  background: rgba(168, 138, 88, 0.08);
+}
+
+.tn-tag-rejected {
+  border-color: rgba(155, 98, 94, 0.4);
+  color: var(--tn-state-rejected);
+  background: rgba(155, 98, 94, 0.08);
+}
+
+.tn-tag-steel {
+  border-color: rgba(113, 134, 154, 0.4);
+  color: var(--tn-steel-highlight);
+  background: rgba(113, 134, 154, 0.08);
+}
+
+.tn-tag-brass {
+  border-color: rgba(184, 149, 98, 0.4);
+  color: var(--tn-brass-base);
+  background: rgba(184, 149, 98, 0.08);
+}
+
+/* Button & Action Primitives */
+.tn-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--tn-radius-sm);
+  font-family: var(--tn-font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--tn-bg-panel);
+  color: var(--tn-text-primary);
+  border: 1px solid var(--tn-geo-major);
+  cursor: pointer;
+  transition: all var(--tn-transition-fast);
+}
+
+.tn-btn:hover {
+  border-color: var(--tn-steel-base);
+  background: var(--tn-bg-panel-hover);
+  color: var(--tn-steel-highlight);
+}
+
+.tn-btn-primary {
+  background: var(--tn-steel-base);
+  color: var(--tn-bg-base);
+  border-color: var(--tn-steel-highlight);
+  font-weight: 600;
+}
+
+.tn-btn-primary:hover {
+  background: var(--tn-steel-highlight);
+  color: var(--tn-bg-base);
+  border-color: #A3B8CC;
+}
+
+.tn-btn-brass {
+  border-color: var(--tn-brass-base);
+  color: var(--tn-brass-base);
+  background: rgba(184, 149, 98, 0.06);
+}
+
+.tn-btn-brass:hover {
+  background: var(--tn-brass-base);
+  color: var(--tn-bg-base);
+}
+
+.tn-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Panel Structure */
+.tn-panel {
+  background: var(--tn-bg-panel);
+  border: 1px solid var(--tn-geo-major);
+  border-radius: var(--tn-radius-sm);
+}
